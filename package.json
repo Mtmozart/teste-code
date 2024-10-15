@@ -5,10 +5,12 @@
   "scripts": {
     "test": "npm run reset && vitest",
     "dev": "nodemon src/main.ts",
-    "start": "npm run dev",
-    "generate": "cd src && npx prisma generate",
-    "coverage": "npm run reset && vitest --coverage",
+    "start": "npm run db:start && npm run dev",
+    "db:start": "npm run generate && npm run migrate && npm run seed",
+    "generate": "npx prisma generate",
+    "migrate": "npx prisma migrate dev --name initial",
     "seed": "ts-node src/seeds/seed-test.ts",
+    "coverage": "npm run reset && vitest --coverage",
     "reset": "cd src && npx prisma db push --force-reset && npm run seed "
   },
   "keywords": [],
@@ -42,5 +44,8 @@
     "express-async-errors": "^3.1.1",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.7"
+  },
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
   }
 }

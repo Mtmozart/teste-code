@@ -4,7 +4,9 @@
 <code><img height="27" src="https://github.com/tandpfun/skill-icons/raw/main/icons/TypeScript.svg" alt="typescript"></code>
 <code><img height="27" src="https://github.com/tandpfun/skill-icons/raw/main/icons/NodeJS-Dark.svg" alt="nodejs"></code>
 <code><img height="27" src="https://github.com/tandpfun/skill-icons/raw/main/icons/ExpressJS-Dark.svg" alt="expressjs"></code>
-<code><img height="27" src="https://github.com/tandpfun/skill-icons/raw/main/icons/MongoDB.svg" alt="mongodb"></code>
+<code><img height="27" src="https://raw.githubusercontent.com/tandpfun/skill-icons/65dea6c4eaca7da319e552c09f4cf5a9a8dab2c8/icons/MySQL-Dark.svg" alt="MySQL"></code>
+<code><img height="27" src="https://raw.githubusercontent.com/tandpfun/skill-icons/65dea6c4eaca7da319e552c09f4cf5a9a8dab2c8/icons/Docker.svg" alt="Docker"></code>
+
 
 <div align="center">
 <h1>Opus</h1>
@@ -120,3 +122,135 @@ For any inquiries or feedback, please contact the community: [codewarriorsdevs@g
 
 Thanks! :)
 </div>
+
+# Documentação do backend
+## Descrição
+Está documentação trás as informações necessárias para a utilização do backend do projeto Upos. Nela você encontrará informações sobre as rotas disponíveis, os métodos aceitos, os parâmetros necessários e os comandos para rodar o projeto e os testes.
+
+### Tecnologias Utilizadas 
+
+| Tecnologia                   | Descrição                               |
+|------------------------------|-----------------------------------------|
+| Node.js                      | Runtime de JavaScript                   |
+| Express                      | Framework Web                           |
+| Prisma                       | ORM (Mapeamento de Objetos-Relacionais) |
+| Docker                       | Contêinerização                         |
+| MySQL                        | Banco de Dados                          |
+| Jest                         | Testes                                  |
+| Vitest                       | Testes                                  |
+| Bcrypt                       | Criptografia                            |
+| Json Web Token (JWT)         | Autenticação                            |
+| Cors                         | Segurança                               |
+| Dotenv                       | Gerenciamento de Variáveis de Ambiente  |
+| Nodemon                      | Ferramenta de Desenvolvimento           |
+| SuperTest                    | Testes de Integração                    |
+| Multer                       | Upload de Arquivos                      |
+| Ts-node                      | Execução de Código TypeScript           |
+| Typescript                   | Linguagem de Programação                |
+
+
+
+## Instalação
+O servidor e o banco de dados estão em containers docker, para rodar o projeto é necessário ter o docker instalado.
+A opção de usar o docker foi escolhida para facilitar a instalação e a execução do projeto, além de garantir que o ambiente de desenvolvimento seja o mesmo em todos os computadores.
+
+#### Comandos para rodar o projeto
+```bash
+  docker-compose up # Roda o servidor e o banco de dados em modo de visualização de logs
+  docker-compose up -d # Roda o servidor e o banco de dados em modo de background
+```
+Um vez que o projeto esteja rodando, você precisará rodar as migrations para criar as tabelas no banco de dados e os seeders para popular o banco de dados com dados iniciais, se tiver, e os dados usados nos testes.
+
+```bash
+  docker-compose exec -it upos_backend /bin/bash # Acessa o container do backend
+  npx prisma migrate dev --name <nome-da-migration> # Cria uma migration
+  npm run seed # Roda os seeders
+```
+
+Após todos os comandos terem sidos executados, o projeto estará rodando e pronto para ser utilizado.
+
+Para rodar os testes, você deverá estar dentro do container do backend e rodar o comando:
+```bash
+  npm run test
+```
+
+Caso encontre algum erro, por favor, abra uma issue no repositório do projeto.
+
+## Rotas autenticação e candidato
+
+Todas as rotas podem ser acessadas através do endereço `http://localhost:8000/*`, onde `*` é o caminho da rota.
+Todas as rotas, com exceção da rota de login e cadastro, necessitam de um token de autenticação no header da requisição.
+
+```json
+{
+  Authorization: "Bearer <token-valido>"
+}
+```
+
+### Rota de login
+ - **METHOD:** *POST*.
+ - **PATH:** `/login`.
+ - **BODY:**
+```json
+{
+  "email": "email@email.com",
+  "password": "senha123"
+}
+```
+  - **RESPONSE:**
+```json
+{
+  "token": "<token>"
+}
+```
+<br>
+
+**DESCRIPTION:**
+
+ Essa rota é responsável por autenticar o usuário e gerar um token de autenticação com **jwt** (Json Web Token).
+ 
+ Ela recebe um objeto com o email e a senha do usuário e valida esses dados comparando as informações, email e senha, com os dados no banco de dados. A senha passada é comparada com o hash armazenado no banco de dados utilizando o **bcrypt**, e se for validado, o login é permitido e um token é gerado e retornado na resposta da requisição.
+
+### Rota de cadastro de candidato
+
+ - **METHOD:** *POST*.
+ - **PATH:** `/candidate/register`.
+ - **BODY:**
+
+```json
+{
+  "name": "Nome do Candidato",
+  "email": "email@email.com",
+  "password": "senha123",
+  "phone": "123456789",
+  "address": "Rua dos Bobos, nº 0",
+  "age": 20,
+  "about": "Sobre o candidato",
+  "experience": "Experiência do candidato",
+  "formation": "Formação do candidato",
+  "currirulum": "file.pdf" # Arquivo do currículo
+}
+```
+  - **RESPONSE:**
+```json
+{
+  "message": "Candidato cadastrado com sucesso"
+}
+```
+<br>
+
+**DESCRIPTION:**
+
+ Essa rota é responsável por cadastrar um candidato no banco de dados.
+ 
+ Ela recebe um objeto com as informações do candidato e salva esses dados no banco de dados. O formato do email é validado utilizando uma expressão regular(regex). 
+
+ Esses dados foram divididos em três tabelas: `candidates`, `education` e `contactInfo`. 
+ 
+ A tabela `candidates` armazena as informações do candidato, como nome, email, senha, idade, sobre o candidato e as FKs para as outras duas tabelas.
+
+  A tabela `education` armazena as informações de formação do candidato, como experiência, formação e o caminho do arquivo do currículo.
+
+  A tabela `contactInfo` armazena as informações de contato do candidato, como telefone e endereço.
+
+  Todas as informações são salvas de forma atômica, ou seja, se ocorrer algum erro durante a inserção dos dados, nenhuma informação é salva no banco de dados.
