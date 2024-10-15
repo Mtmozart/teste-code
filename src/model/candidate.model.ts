@@ -66,6 +66,7 @@ class CandidateModel {
     const candidate = await this.prisma.candidate.findUnique({
       where: {
         id,
+        isDeleted: false,
       },
       include: {
         contactInfo: true,
@@ -88,7 +89,15 @@ class CandidateModel {
 
   // método para buscar todos os candidatos, falta revisar
   async findAll() {
-    const candidates = await this.prisma.candidate.findMany();
+    const candidates = await this.prisma.candidate.findMany({
+      where: {
+        isDeleted: false,
+      },
+      include: {
+        educations: true,
+        contactInfo: true,
+      },
+    });
 
     const result = candidates.map((candidate) => {
       const { password, ...rest } = candidate;

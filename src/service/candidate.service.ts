@@ -1,7 +1,9 @@
 import { hashPassword } from '../config/bcrypt';
 import { PrismaClient } from '@prisma/client';
 import CandidateModel from '../model/candidate.model';
-import { TCandidate } from '../types/cadidate';
+import { TAllDataCandidate, TCandidate } from '../types/cadidate';
+
+const urlBase = `${process.env.URL_HOST}/view/curriculum`;
 
 class CandidateService {
 
@@ -25,14 +27,55 @@ class CandidateService {
 
   // método para buscar um candidato pelo id, falta revisar
   async findById(id: number) {
-    const result = await this.model.findById(id);
-    return result;
+    
+    const result = await this.model.findById(id) as any;
+
+    if (result.error) {
+      return result;
+    }
+
+    const formatedData = {
+      name: result.name,
+      email: result.email,
+      age: result.age,
+      about: result.about,
+      isDeleted: result.isDeleted,
+      phone: result.contactInfo.phone,
+      address: result.contactInfo.address,
+      created_at: result.created_at,
+      updated_at: result.updated_at,
+      formation: result.educations[0].formation,
+      experience: result.educations[0].experience,
+      curriculum: `${urlBase}/${result.educations[0].curriculum}`,
+    };
+
+    return formatedData;
   }
 
   // método para buscar todos os candidatos, falta revisar
   async findAll() {
-    const result = await this.model.findAll();
-    return result;
+    const result = await this.model.findAll() as any;
+
+    if (result.error) {
+      return result;
+    }
+
+    const formatedData = result.map((candidate: TAllDataCandidate) => {
+      const formated = {
+        name: candidate.name,
+        email: candidate.email,
+        age: candidate.age,
+        address: candidate.contactInfo.address,
+        isDeleted: candidate.isDeleted,
+        curriculum: `${urlBase}/${candidate.educations[0].curriculum}`,
+        created_at: candidate.created_at,
+        updated_at: candidate.updated_at,
+      }
+
+      return formated;
+    })
+
+    return formatedData;
   }
 
   // método para atualizar um candidato, falta revisar

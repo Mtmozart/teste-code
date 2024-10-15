@@ -45,16 +45,7 @@ class CandidateMiddleware {
 
       return;
     }
-
-    // Verifica se o currículo foi enviado
-    if (!file) {
-      res.status(400).json({
-        error: 'Envie o currículo!',
-      });
-
-      return;
-    }    
-
+    
     // Verificação do tamanho da senha 
     if (password.length < 8) {
       res.status(400).json({

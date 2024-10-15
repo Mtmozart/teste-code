@@ -39,7 +39,7 @@ model education {
   id          Int      @id @default(autoincrement())
   formation   String
   experience  String
-  curriculum  String
+  curriculum  String   @default("")
   candidate   candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   candidateId Int
 }

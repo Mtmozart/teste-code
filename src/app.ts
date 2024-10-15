@@ -2,7 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import router from './routes';
+import router from './routes/CRUD';
 
 dotenv.config();
 
@@ -24,7 +24,8 @@ class App {
             },
         ));
         this.app.use(express.json());
-        this.app.use('/usuarios/img', express.static('uploads/foto'));
+        this.app.use('/view/img', express.static('uploads/photo'));
+        this.app.use('/view/curriculum', express.static('uploads/curriculum'));
     }
 
     private routes(): void {

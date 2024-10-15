@@ -15,7 +15,6 @@ class CandidateController {
   async store(req: Request, res: Response) {
     const { email } = req.body;
     const data = req.body;
-    const file = req.file;
 
     const candidateExist = await this.prisma.candidate.findUnique({
       where: {
@@ -28,14 +27,6 @@ class CandidateController {
         error: 'Email já cadastrado!',
       });
     }
-
-    if (!file) {
-      return res.status(400).json({
-        error: 'Arquivo não enviado!',
-      });
-    }
-
-    data.curriculum = file.filename
 
     const result = await this.service.register(data) as any;
 
