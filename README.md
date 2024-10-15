@@ -116,10 +116,12 @@ Documentação oficial do projeto "Opus", uma plataforma responsável por conect
   </tr>
 </table>
 </div>
+</div>
 
-# Documentação do backend
-## Descrição
-Está documentação trás as informações necessárias para a utilização do backend do projeto Upos. Nela você encontrará informações sobre as rotas disponíveis, os métodos aceitos, os parâmetros necessários e os comandos para rodar o projeto e os testes.
+<br>
+
+# Documentação
+Está documentação trás as informações necessárias para a utilização do backend do projeto Opus. Nela você encontrará informações sobre as rotas disponíveis, os métodos aceitos, os parâmetros necessários e os comandos para rodar o projeto e os testes.
 
 ### Tecnologias Utilizadas 
 
@@ -145,25 +147,40 @@ Está documentação trás as informações necessárias para a utilização do 
 
 
 ## Instalação
-O servidor e o banco de dados estão em containers docker, para rodar o projeto é necessário ter o docker instalado.
-A opção de usar o docker foi escolhida para facilitar a instalação e a execução do projeto, além de garantir que o ambiente de desenvolvimento seja o mesmo em todos os computadores.
+O servidor e o banco de dados estão em containers docker.
 
-#### Comandos para rodar o projeto
+É altamente recomendável não modificar o arquivo `docker-compose.yml` para evitar problemas com a execução do projeto. Igualmente, não altere os scripts de execução do projeto no `package.json`.
+
+Caso seja necessário alterar alguma configuração de porta, tenha certeza de fazer o bind corretamente no arquivo `docker-compose.yml` e no `dockerfile` no caso do backend.
+
+Não é necessário instalar o banco de dados.
+
+### Comandos para rodar o projeto
+
+Instale as dependências do projeto:
+```bash
+  npm install
+```
+
+Essas dependências são locais e é necessária a instalação delas para poder fazer edições no projeto.
+
+Em seguida, rode o projeto com o comando abaixo para rodar o servidor e o banco de dados:
+
 ```bash
   docker-compose up # Roda o servidor e o banco de dados em modo de visualização de logs
   docker-compose up -d # Roda o servidor e o banco de dados em modo de background
 ```
-Um vez que o projeto esteja rodando, você precisará rodar as migrations para criar as tabelas no banco de dados e os seeders para popular o banco de dados com dados iniciais, se tiver, e os dados usados nos testes.
+O Docker irá baixar as imagens e criar os containers automaticamente.
 
-```bash
-  docker-compose exec -it upos_backend /bin/bash # Acessa o container do backend
-  npx prisma migrate dev --name <nome-da-migration> # Cria uma migration
-  npm run seed # Roda os seeders
-```
+Além disso, irá instalar as dependências do projeto e um script irá inicializar o prisma(generate) e rodar as migrations e os seeders.
 
 Após todos os comandos terem sidos executados, o projeto estará rodando e pronto para ser utilizado.
 
 Para rodar os testes, você deverá estar dentro do container do backend e rodar o comando:
+
+```bash
+  docker-compose exec -it opus_backend /bin/bash # Acessa o container do backend
+```
 ```bash
   npm run test
 ```
@@ -194,12 +211,12 @@ Todas as rotas, com exceção da rota de login e cadastro, necessitam de um toke
   - **RESPONSE:**
 ```json
 {
-  "token": "<token>"
+  "token": "<token>" # Isso é um exemplo, o token é gerado pelo jwt. Um token real terá um formato diferente
 }
 ```
 <br>
 
-**DESCRIPTION:**
+**Descrição:**
 
  Essa rota é responsável por autenticar o usuário e gerar um token de autenticação com **jwt** (Json Web Token).
  
@@ -222,7 +239,7 @@ Todas as rotas, com exceção da rota de login e cadastro, necessitam de um toke
   "about": "Sobre o candidato",
   "experience": "Experiência do candidato",
   "formation": "Formação do candidato",
-  "currirulum": "file.pdf" # Arquivo do currículo
+  "curriculum": "file.pdf" # Arquivo do currículo
 }
 ```
   - **RESPONSE:**
@@ -235,21 +252,25 @@ Todas as rotas, com exceção da rota de login e cadastro, necessitam de um toke
 
 **DESCRIPTION:**
 
- Essa rota é responsável por cadastrar um candidato no banco de dados.
+ Essa rota é responsável por cadastrar um candidato. 
+ Ela recebe um objeto com as informações do candidato, as valida e salva esses dados. O formato do email é validado utilizando uma expressão regular(regex). 
+
+ Esses dados são divididos em três tabelas para melhor organização: `candidates`, `education` e `contactInfo`. 
  
- Ela recebe um objeto com as informações do candidato e salva esses dados no banco de dados. O formato do email é validado utilizando uma expressão regular(regex). 
+  - A tabela `candidates` armazena as informações do candidato, como nome, email, senha, idade, sobre o candidato e as FKs para as outras duas tabelas.
 
- Esses dados foram divididos em três tabelas: `candidates`, `education` e `contactInfo`. 
- 
- A tabela `candidates` armazena as informações do candidato, como nome, email, senha, idade, sobre o candidato e as FKs para as outras duas tabelas.
+  - A tabela `education` armazena as informações de formação do candidato, como experiência, formação e o caminho do arquivo do currículo.
 
-  A tabela `education` armazena as informações de formação do candidato, como experiência, formação e o caminho do arquivo do currículo.
+  - A tabela `contactInfo` armazena as informações de contato do candidato, como telefone e endereço.
 
-  A tabela `contactInfo` armazena as informações de contato do candidato, como telefone e endereço.
+  Todas as operações são executadas dentro de uma transação para garantir que, se ocorrer qualquer erro durante a inserção, nenhuma mudança seja feita no banco de dados, mantendo a integridade dos dados.
 
-  Todas as informações são salvas de forma atômica, ou seja, se ocorrer algum erro durante a inserção dos dados, nenhuma informação é salva no banco de dados.
+
+<div align="center">
 
 ## Contact
 For any inquiries or feedback, please contact the community: [codewarriorsdevs@gmail.com](codewarriorsdevs@gmail.com).
 
 Thanks! :)
+
+</div>
