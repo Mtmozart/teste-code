@@ -115,12 +115,6 @@ Documentação oficial do projeto "Opus", uma plataforma responsável por conect
     </td>
   </tr>
 </table>
-
-
-## Contact
-For any inquiries or feedback, please contact the community: [codewarriorsdevs@gmail.com](codewarriorsdevs@gmail.com).
-
-Thanks! :)
 </div>
 
 # Documentação do backend
@@ -254,3 +248,8 @@ Todas as rotas, com exceção da rota de login e cadastro, necessitam de um toke
   A tabela `contactInfo` armazena as informações de contato do candidato, como telefone e endereço.
 
   Todas as informações são salvas de forma atômica, ou seja, se ocorrer algum erro durante a inserção dos dados, nenhuma informação é salva no banco de dados.
+
+## Contact
+For any inquiries or feedback, please contact the community: [codewarriorsdevs@gmail.com](codewarriorsdevs@gmail.com).
+
+Thanks! :)
