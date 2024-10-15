@@ -130,6 +130,18 @@ Documentação oficial do projeto "Opus", uma plataforma responsável por conect
   - [Rotas de autenticação e candidato](#rotas-de-autenticação-e-candidato)
     - [Rota de login](#rota-de-login)
     - [Rota de cadastro de candidato](#rota-de-cadastro-de-candidato)
+  - [Rotas de busca de candidatos](#rotas-de-busca-de-candidatos)
+    - [Buscar um candidato](#buscar-um-candidato)
+    - [Buscar todos os candidatos](#buscar-todos-os-candidatos)
+  - [Rotas de edição e deleção de candidatos](#rotas-de-edição-e-deleção-de-candidatos)
+    - [Editar um candidato](#editar-um-candidato)
+    - [Deletar um candidato](#deletar-um-candidato)
+    - [Restaurar um candidato](#restaurar-um-candidato)
+  - [Rotas de Upload de Arquivos](#rotas-de-upload-de-arquivos)
+    - [Upload de Currículo](#upload-de-currículo)
+  - [Rotas estáticas](#rotas-estáticas)
+    - [Visualizar Currículo](#visualizar-currículo)
+- [Contact](#contact)
 
 # Documentação
 Está documentação trás as informações necessárias para a utilização do backend do projeto Opus. Nela você encontrará informações sobre as rotas disponíveis, os métodos aceitos, os parâmetros necessários e os comandos para rodar o projeto e os testes.
