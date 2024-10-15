@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
-import AuthMiddleware from '../../middleware/auth.middleware';
-import { handleUpload } from '../../middleware/uploads.middleware';
-import UploadsModel from '../../model/uploads.model';
+import AuthMiddleware from '../middleware/auth.middleware';
+import { handleUpload } from '../middleware/uploads.middleware';
+import UploadsModel from '../model/uploads.model';
 import { PrismaClient } from '@prisma/client';
-import UploadsService from '../../service/uploads.service';
-import UploadsController from '../../controller/uploads.controller';
+import UploadsService from '../service/uploads.service';
+import UploadsController from '../controller/uploads.controller';
 
 const prisma = new PrismaClient();
 const model = new UploadsModel(prisma);

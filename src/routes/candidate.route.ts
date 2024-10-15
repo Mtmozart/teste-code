@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
-import AuthMiddleware from '../../middleware/auth.middleware';
-import { handleUpload } from '../../middleware/uploads.middleware';
-import CandidateController from '../../controller/candidate.controller';
-import CandidateModel from '../../model/candidate.model';
-import CandidateService from '../../service/candidate.service';
-import CandidateMiddleware from '../../middleware/candidate.middleware';
+import AuthMiddleware from '../middleware/auth.middleware';
+import { handleUpload } from '../middleware/uploads.middleware';
+import CandidateController from '../controller/candidate.controller';
+import CandidateModel from '../model/candidate.model';
+import CandidateService from '../service/candidate.service';
+import CandidateMiddleware from '../middleware/candidate.middleware';
 
 const model = new CandidateModel();
 const service = new CandidateService(model);
