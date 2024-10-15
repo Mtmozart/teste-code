@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+
+  
+  db:
+    image: mysql:8.0
+    container_name: opus_db
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"                      # Porta padrão do MySQL
+    volumes:
+      - db_data:/var/lib/mysql           # Persistência de dados
+    networks:
+      - opus-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: opus_backend
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"  # Porta do backend
+    depends_on:
+      - db  # Garante que o banco de dados seja iniciado antes do backend
+    volumes:
+      - .:/app
+    networks:
+      - opus-network
+
+volumes:
+  db_data:
+
+
+networks:
+  opus-network:
+    driver: bridge  # Rede do tipo bridge (padrão)

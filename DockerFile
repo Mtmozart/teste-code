@@ -1,0 +1,25 @@
+# Usar a imagem base Node.js
+FROM node:20
+
+# Defini o diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia os arquivos de dependência 
+COPY package*.json ./
+
+
+# Instala as dependências
+RUN npm install
+
+# Instala nodemon globalmente para permitir hot-reloading no desenvolvimento
+RUN npm install -g nodemon
+
+# Copiar todo o código-fonte
+COPY . .
+COPY .env .env
+
+# Expoe a porta
+EXPOSE 8000
+
+# Comando para iniciar a aplicação em modo de desenvolvimento usando nodemon
+CMD ["npm", "start"]
