@@ -7,7 +7,6 @@
 <code><img height="27" src="https://raw.githubusercontent.com/tandpfun/skill-icons/65dea6c4eaca7da319e552c09f4cf5a9a8dab2c8/icons/MySQL-Dark.svg" alt="MySQL"></code>
 <code><img height="27" src="https://raw.githubusercontent.com/tandpfun/skill-icons/65dea6c4eaca7da319e552c09f4cf5a9a8dab2c8/icons/Docker.svg" alt="Docker"></code>
 
-
 <div align="center">
 <h1>Opus</h1>
 Documentação oficial do projeto "Opus", uma plataforma responsável por conectar candidatos a empresas e serviços da região de Pedro II - PI.
@@ -144,33 +143,31 @@ Documentação oficial do projeto "Opus", uma plataforma responsável por conect
 - [Contact](#contact)
 
 # Documentação
+
 Está documentação trás as informações necessárias para a utilização do backend do projeto Opus. Nela você encontrará informações sobre as rotas disponíveis, os métodos aceitos, os parâmetros necessários e os comandos para rodar o projeto e os testes.
 
-
-## Tecnologias Utilizadas 
+## Tecnologias Utilizadas
 
 <br>
 
-| Tecnologia                   | Descrição                               |
-|------------------------------|-----------------------------------------|
-| Node.js                      | Runtime de JavaScript                   |
-| Express                      | Framework Web                           |
-| Prisma                       | ORM (Mapeamento de Objetos-Relacionais) |
-| Docker                       | Contêinerização                         |
-| MySQL                        | Banco de Dados                          |
-| Jest                         | Testes                                  |
-| Vitest                       | Testes                                  |
-| Bcrypt                       | Criptografia                            |
-| Json Web Token (JWT)         | Autenticação                            |
-| Cors                         | Segurança                               |
-| Dotenv                       | Gerenciamento de Variáveis de Ambiente  |
-| Nodemon                      | Ferramenta de Desenvolvimento           |
-| SuperTest                    | Testes de Integração                    |
-| Multer                       | Upload de Arquivos                      |
-| Ts-node                      | Execução de Código TypeScript           |
-| Typescript                   | Linguagem de Programação                |
-
-
+| Tecnologia           | Descrição                               |
+| -------------------- | --------------------------------------- |
+| Node.js              | Runtime de JavaScript                   |
+| Express              | Framework Web                           |
+| Prisma               | ORM (Mapeamento de Objetos-Relacionais) |
+| Docker               | Contêinerização                         |
+| MySQL                | Banco de Dados                          |
+| Jest                 | Testes                                  |
+| Vitest               | Testes                                  |
+| Bcrypt               | Criptografia                            |
+| Json Web Token (JWT) | Autenticação                            |
+| Cors                 | Segurança                               |
+| Dotenv               | Gerenciamento de Variáveis de Ambiente  |
+| Nodemon              | Ferramenta de Desenvolvimento           |
+| SuperTest            | Testes de Integração                    |
+| Multer               | Upload de Arquivos                      |
+| Ts-node              | Execução de Código TypeScript           |
+| Typescript           | Linguagem de Programação                |
 
 ## Instalação
 
@@ -189,6 +186,7 @@ Não é necessário instalar o banco de dados.
 ## Comandos para rodar o projeto
 
 Instale as dependências do projeto:
+
 ```bash
   npm install # Instala as dependências do projeto localmente
 ```
@@ -201,6 +199,7 @@ Em seguida, rode o projeto com o comando abaixo para rodar o servidor e o banco 
   docker-compose up # Roda o servidor e o banco de dados em modo de visualização de logs
   docker-compose up -d # Roda o servidor e o banco de dados em modo de background
 ```
+
 O Docker irá baixar as imagens e criar os containers automaticamente.
 
 Além disso, irá instalar as dependências do projeto e um script irá inicializar o prisma(generate) e rodar as migrations e os seeders.
@@ -212,6 +211,7 @@ Para rodar os testes, você deverá estar dentro do container do backend e rodar
 ```bash
   docker-compose exec -it opus_backend /bin/bash # Acessa o container do backend
 ```
+
 ```bash
   npm run test # Roda os testes
 ```
@@ -227,46 +227,50 @@ Todas as rotas, com exceção da rota de login e cadastro, necessitam de um toke
 
 ```json
 {
-  Authorization: "Bearer <token-valido>"
+  "Authorization": "Bearer <token-valido>"
 }
 ```
 
 ### Rota de login
 
-> ***Rota livre de autenticação.***
+> **_Rota livre de autenticação._**
 
- - **METHOD:** *POST*.
- - **PATH:** `/login`.
- - **BODY:**
+- **METHOD:** _POST_.
+- **PATH:** `/auth`.
+- **BODY:**
+
 ```json
 {
   "email": "email@email.com",
   "password": "senha123"
 }
 ```
-  - **RESPONSE:**
+
+- **RESPONSE:**
+
 ```json
 {
   "token": "<token>" # Isso é um exemplo, o token é gerado pelo jwt. Um token real terá um formato diferente
 }
 ```
+
 <br>
 
 **Descrição:**
 
- Essa rota autentica o usuário e gera um token com **jwt** (Json Web Token).
- 
- Ela recebe um objeto com o email e a senha do usuário e valida esses dados comparando as informações, email e senha, com os do banco de dados. A senha passada é comparada com o hash armazenado no banco de dados utilizando o **bcrypt**, e se for validado, o login é permitido e um token é gerado e retornado na resposta da requisição.
+Essa rota autentica o usuário e gera um token com **jwt** (Json Web Token).
+
+Ela recebe um objeto com o email e a senha do usuário e valida esses dados comparando as informações, email e senha, com os do banco de dados. A senha passada é comparada com o hash armazenado no banco de dados utilizando o **bcrypt**, e se for validado, o login é permitido e um token é gerado e retornado na resposta da requisição.
 
 ### Rota de cadastro de candidato
 
-> ***Rota livre de autenticação.***
+> **_Rota livre de autenticação._**
 
 [Sumário](#sumário)
 
- - **METHOD:** *POST*.
- - **PATH:** `/candidate/register`.
- - **BODY:**
+- **METHOD:** _POST_.
+- **PATH:** `/candidate/register`.
+- **BODY:**
 
 ```json
 {
@@ -282,29 +286,32 @@ Todas as rotas, com exceção da rota de login e cadastro, necessitam de um toke
   "curriculum": "file.pdf" # Arquivo do currículo
 }
 ```
-  - **RESPONSE:**
+
+- **RESPONSE:**
+
 ```json
 {
   "message": "Candidato cadastrado com sucesso"
 }
 ```
+
 <br>
 
 **DESCRIPTION:**
 
- O formato do email é validado utilizando uma expressão regular(regex). 
+O formato do email é validado utilizando uma expressão regular(regex).
 
- Esses dados são divididos em três tabelas para melhor organização: `candidates`, `education` e `contactInfo`. 
- 
-  - A tabela `candidates` armazena as informações do candidato, como nome, email, senha, idade, sobre e as FKs para as outras duas tabelas.
+Esses dados são divididos em três tabelas para melhor organização: `candidates`, `education` e `contactInfo`.
 
-  - A tabela `education` armazena as informações de formação do candidato, como experiência, formação e o caminho do arquivo do currículo.
+- A tabela `candidates` armazena as informações do candidato, como nome, email, senha, idade, sobre e as FKs para as outras duas tabelas.
 
-  - A tabela `contactInfo` armazena as informações de contato do candidato, como telefone e endereço.
+- A tabela `education` armazena as informações de formação do candidato, como experiência, formação e o caminho do arquivo do currículo.
 
-  Todas as operações são executadas dentro de uma transação para garantir que, se ocorrer qualquer erro durante a inserção, nenhuma mudança seja feita no banco de dados, mantendo a integridade dos dados.
+- A tabela `contactInfo` armazena as informações de contato do candidato, como telefone e endereço.
 
-  O arquivo do currículo é salvo no diretório `uploads/curriculum` e o nomw do arquivo é salvo no banco de dados.
+Todas as operações são executadas dentro de uma transação para garantir que, se ocorrer qualquer erro durante a inserção, nenhuma mudança seja feita no banco de dados, mantendo a integridade dos dados.
+
+O arquivo do currículo é salvo no diretório `uploads/curriculum` e o nomw do arquivo é salvo no banco de dados.
 
 ## Rotas de busca de candidatos
 
@@ -312,10 +319,10 @@ Todas as rotas, com exceção da rota de login e cadastro, necessitam de um toke
 
 ### Buscar um candidato
 
-> ***Rota protegida por autenticação.***
+> **_Rota protegida por autenticação._**
 
- - **METHOD:** *GET*.
- - **PATH:** `/candidate/:id`.
+- **METHOD:** _GET_.
+- **PATH:** `/candidate/:id`.
 - **RESPONSE:**
 
 ```json
@@ -343,11 +350,11 @@ Ela trás todas as informações do candidato incluido a `URL` do currículo.
 
 ### Buscar todos os candidatos
 
-> ***Rota protegida por autenticação.***
+> **_Rota protegida por autenticação._**
 
- - **METHOD:** *GET*.
- - **PATH:** `/candidates`.
- - **RESPONSE:**
+- **METHOD:** _GET_.
+- **PATH:** `/candidates`.
+- **RESPONSE:**
 
 ```json
   [
@@ -380,7 +387,7 @@ Ela trás todas as informações do candidato incluido a `URL` do currículo.
 
 **DESCRIPTION:**
 
-Trás somente as informações básicas do candidato, como nome, email, idade e sobre o candidato. 
+Trás somente as informações básicas do candidato, como nome, email, idade e sobre o candidato.
 
 Possivelmente será implementado um sistema de busca com filtros para que o recrutador possa buscar candidatos com base em suas habilidades, formação, experiência, idade, etc.
 
@@ -390,18 +397,18 @@ Possivelmente será implementado um sistema de busca com filtros para que o recr
 
 ### Editar um candidato
 
-> ***Rota protegida por autenticação.***
+> **_Rota protegida por autenticação._**
 
- - **METHOD:** *PUT*.
- - **PATH:** `/candidate/:id`.
- - **BODY:**
+- **METHOD:** _PUT_.
+- **PATH:** `/candidate/:id`.
+- **BODY:**
 
 ```json
-  {
+{
   "name": "John Doe",
   "email": "test@test.com",
   "phone": "123456789",
-  "address": "1234 Test St",  
+  "address": "1234 Test St",
   "age": 25,
   "about": "I am a test",
   "experience": "I have experience in testing",
@@ -427,13 +434,13 @@ Essa mesma rota lida muito bem com os dois casos, pois ela verifica quais campos
 
 ### Deletar um candidato
 
-> ***Rota protegida por autenticação.***
+> **_Rota protegida por autenticação._**
 
 [Sumário](#sumário)
 
- - **METHOD:** *DELETE*.
- - **PATH:** `/candidate/:id`.
- - **RESPONSE:**
+- **METHOD:** _DELETE_.
+- **PATH:** `/candidate/:id`.
+- **RESPONSE:**
 
 ```json
 {
@@ -449,13 +456,13 @@ Essa técnica é também conhecida como deleção lógica e é muito utilizada e
 
 ### Restaurar um candidato
 
-> ***Rota protegida por autenticação.***
+> **_Rota protegida por autenticação._**
 
 [Sumário](#sumário)
 
- - **METHOD:** *PATCH*.
- - **PATH:** `/candidate/restore/:id`.
- - **RESPONSE:**
+- **METHOD:** _PATCH_.
+- **PATH:** `/candidate/restore/:id`.
+- **RESPONSE:**
 
 ```json
 {
@@ -473,19 +480,20 @@ A restauração é feita alterando o campo `isDeleted` para `false` no banco de 
 
 ### Upload de Currículo
 
-> ***Rota protegida por autenticação.***
+> **_Rota protegida por autenticação._**
 
- - **METHOD:** *POST*.
- - **PATH:** `/uploads/curriculum`.
- - **BODY:** *Multipart Form Data*.
+- **METHOD:** _POST_.
+- **PATH:** `/uploads/curriculum`.
+- **BODY:** _Multipart Form Data_.
 
 - **RESPONSE:**
-  
+
   ```json
   {
     "message": "Currículo enviado com sucesso"
   }
   ```
+
 - **RESPONSE COM ERROR:**
   Resposta padrão, tanto para o não envio do arquivo, quanto para o envio de um arquivo inválido.
 
@@ -494,7 +502,8 @@ A restauração é feita alterando o campo `isDeleted` para `false` no banco de 
     "message": "Arquivo não enviado ou com formato inválido. Permitido somente arquivos .pdf"
   }
   ```
-**DESCRIPTION:**
+
+  **DESCRIPTION:**
 
 O upload de arquivos é feito através de um formulário do tipo `multipart/form-data`.
 
@@ -506,22 +515,20 @@ Um middleware é utilizado para fazer o upload do arquivo e salvar no diretório
 
 ### Visualizar Currículo
 
-> ***Rota protegidas por autenticação.***
+> **_Rota protegidas por autenticação._**
 
- - **METHOD:** *GET*.
- - **PATH:** `/view/curriculum/* - O asterisco é o nome do arquivo`.
- 
- **RESPONSE:**
- 
-> *O arquivo será exibido no navegador.*
+- **METHOD:** _GET_.
+- **PATH:** `/view/curriculum/* - O asterisco é o nome do arquivo`.
+
+**RESPONSE:**
+
+> _O arquivo será exibido no navegador._
 
 **DESCRIPTION:**
 
 Todas as rotas estáticas começam com prefixo `/view` e são utilizadas para visualizar arquivos estáticos, como imagens, currículos, etc.
 
-
-
-<br> 
+<br>
 
 <div align="center">
 

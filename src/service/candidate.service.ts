@@ -1,7 +1,8 @@
 import { hashPassword } from '../config/bcrypt';
 import { PrismaClient } from '@prisma/client';
 import CandidateModel from '../model/candidate.model';
-import { TAllDataCandidate, TCandidate } from '../types/cadidate';
+import { TAllDataCandidate, TCandidate, TCandidateCreate, TCandidateDefaultData } from '../types/cadidate';
+
 
 const urlBase = `${process.env.URL_HOST}/view/curriculum`;
 
@@ -16,8 +17,8 @@ class CandidateService {
   }
 
   // método para cadastrar um candidato, falta revisar
-  async register(data: any) {
-    const { password } = data;
+  async register(data: TCandidateCreate) {
+    const  password = data.password;
 
     const hash = await this.hashPassword(password);
     const newData = { ...data, password: hash };
@@ -26,7 +27,7 @@ class CandidateService {
   }
 
   // método para buscar um candidato pelo id, falta revisar
-  async findById(id: number) {
+  async findById(id: number): Promise<TCandidateDefaultData> {
     
     const result = await this.model.findById(id) as any;
 
@@ -34,48 +35,46 @@ class CandidateService {
       return result;
     }
 
-    const formatedData = {
+    const formattedData: TCandidateDefaultData = {
+      id: result.id,
       name: result.name,
       email: result.email,
       age: result.age,
       about: result.about,
-      isDeleted: result.isDeleted,
-      phone: result.contactInfo.phone,
-      address: result.contactInfo.address,
+      experience: result.experience,
+      contactInfo: result.contactInfo,
+      educations: result.educations,    
       created_at: result.created_at,
       updated_at: result.updated_at,
-      formation: result.educations[0].formation,
-      experience: result.educations[0].experience,
-      curriculum: `${urlBase}/${result.educations[0].curriculum}`,
-    };
-
-    return formatedData;
+     
+    };    
+    return formattedData;
   }
 
   // método para buscar todos os candidatos, falta revisar
   async findAll() {
     const result = await this.model.findAll() as any;
-
     if (result.error) {
       return result;
     }
 
-    const formatedData = result.map((candidate: TAllDataCandidate) => {
-      const formated = {
+    const formattedData: TCandidateDefaultData = result.map((candidate: TAllDataCandidate) => {
+      const formatted: TAllDataCandidate = {
+        id: candidate.id,
         name: candidate.name,
         email: candidate.email,
         age: candidate.age,
-        address: candidate.contactInfo.address,
-        isDeleted: candidate.isDeleted,
-        curriculum: `${urlBase}/${candidate.educations[0].curriculum}`,
+        about: candidate.about,
+        contactInfo: candidate.contactInfo,
+        educations: candidate.educations,        
         created_at: candidate.created_at,
         updated_at: candidate.updated_at,
       }
 
-      return formated;
+      return formatted;
     })
 
-    return formatedData;
+    return formattedData;
   }
 
   // método para atualizar um candidato, falta revisar
@@ -92,7 +91,6 @@ class CandidateService {
   }
 
   // restaurar um candidato, falta revisar
-
   async restore(id: number) {
     const result = await this.model.restore(id);
     return result;

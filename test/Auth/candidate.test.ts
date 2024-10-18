@@ -28,7 +28,7 @@ describe('Testes da rota de candidatos', () => {
     const response = await request(app).post('/candidate/register').send(REGISTER_MOCK);
 
     expect(response.body.message).toBe('Usuário registrado!');
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     
   });
 
@@ -57,7 +57,7 @@ describe('Testes da rota de candidatos', () => {
   });
 
   it('não deve conseguir pegar todos os candidatos sem token', async () => {
-    const response = await request(app).get('/candidate')
+    const response = await request(app).get('/candidates')
 
     expect(response.status).toBe(401);
   });
@@ -68,7 +68,7 @@ describe('Testes da rota de candidatos', () => {
     expect(response.status).toBe(401);
   });
 
-  it('não deve conseguir deletar um candidato sem toekn', async () => {
+  it('não deve conseguir deletar um candidato sem token', async () => {
     const response = await request(app).delete('/candidate/1');
 
     expect(response.status).toBe(401);
