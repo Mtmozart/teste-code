@@ -209,7 +209,7 @@ Após todos os comandos terem sidos executados, o projeto estará rodando e pron
 Para rodar os testes, você deverá estar dentro do container do backend e rodar o comando:
 
 ```bash
-  docker-compose exec -it opus_backend /bin/bash # Acessa o container do backend
+  docker exec -it opus_backend /bin/bash # Acessa o container do backend
 ```
 
 ```bash
