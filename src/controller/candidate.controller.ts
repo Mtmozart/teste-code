@@ -14,20 +14,7 @@ class CandidateController {
 
   // método para cadastrar um candidato, falta revisar
   async store(req: Request, res: Response) {
-    const { email } = req.body;
     const data: TCandidateCreate = req.body;
-
-    const candidateExist = await this.prisma.candidate.findUnique({
-      where: {
-        email,
-      },
-    }); 
-
-    if (candidateExist) {
-      return res.status(400).json({
-        error: 'Email já cadastrado!',
-      });
-    }
 
     const result = await this.service.register(data) as any;
 
@@ -53,81 +40,30 @@ class CandidateController {
   async update(req: Request, res: Response) {
     const data = req.body;
     const { id } = req.params;
-    data.id = +id;
-    
-    const candidateExistByEmail = await this.prisma.candidate.findUnique({
-      where: {
-        email: data.email,
-      },
-    }); 
-
-    const candidateExistById= await this.prisma.candidate.findUnique({
-      where: {
-        id: data.id,
-      },
-    }); 
-
-    if(candidateExistById?.isDeleted){
-      return res.status(400).json({
-        error: 'Usuário deletado, consulte a equipe ou restaure sua conta!',
-      });
-    }
-    
-    if (
-      candidateExistByEmail && 
-      candidateExistById &&
-      candidateExistByEmail.id !== candidateExistById.id
-    ) {
-      return res.status(400).json({
-        error: 'Email já cadastrado!',
-      });
-    }
-    
+    data.id = +id;    
 
     const result = await this.service.update(data);
+    if (result.error) return res.status(400).json(result);
     return res.status(200).json({result});
   }
 
   // método para deletar um candidato, falta revisar
   async delete(req: Request, res: Response) {
     const { id } = req.params;
-
-    const candidateExistById= await this.prisma.candidate.findUnique({
-      where: {
-        id: +id,
-      },
-    }); 
-
-    if(candidateExistById?.isDeleted){
-      return res.status(400).json({
-        error: 'Usuário deletado, consulte a equipe ou restaure sua conta!',
-      });
-    }
-    await this.service.delete(+id);
+    const result = await this.service.delete(+id);
+    if (result.error) return res.status(401).json(result);    
     return res.status(204).send();
   }
 
   // restaurar um candidato, falta revisar
   async restore(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id } = req.params;   
    
-    const candidateExistById= await this.prisma.candidate.findUnique({
-      where: {
-        id: +id,
-      },
-    }); 
-
-    if(!candidateExistById?.isDeleted){
-      return res.status(400).json({
-        error: 'Usuário ativo.',
-      });
-    }
-    await this.service.restore(+id);
+    const result = await this.service.restore(+id);
+    if (result.error) return res.status(401).json(result);
+    
     return res.status(200).json({message: "Candidato restaurado com sucesso"});
   }
-
-
-
 }
 
 

@@ -25,7 +25,6 @@ class AuthService {
         error: 'Candidato deletado, restaure sua conta ou entre em contato com o suporte!',
       };
     }
-
     
     if ('password' in isCandidate) {
       const isValidPassword = await comparePassword(password, isCandidate.password);

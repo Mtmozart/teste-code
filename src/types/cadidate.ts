@@ -79,3 +79,7 @@ export type TCandidateDefaultData = {
   isDeleted?: boolean;
 
 };
+
+export type TResponseError = {
+  error?: string;
+}

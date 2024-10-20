@@ -1,7 +1,7 @@
 import { hashPassword } from '../config/bcrypt';
 import { PrismaClient } from '@prisma/client';
 import CandidateModel from '../model/candidate.model';
-import { TAllDataCandidate, TCandidate, TCandidateCreate, TCandidateDefaultData } from '../types/cadidate';
+import { TAllDataCandidate, TCandidate, TCandidateCreate, TCandidateDefaultData, TResponseError } from '../types/cadidate';
 
 
 const urlBase = `${process.env.URL_HOST}/view/curriculum`;
@@ -18,6 +18,18 @@ class CandidateService {
 
   // método para cadastrar um candidato, falta revisar
   async register(data: TCandidateCreate) {
+    const candidateExist = await this.prisma.candidate.findUnique({
+      where: {
+        email: data.email,
+      },
+    }); 
+
+    if (candidateExist) {
+      return {
+        error: 'Email já cadastrado!',
+      };
+    }
+
     const  password = data.password;
 
     const hash = await this.hashPassword(password);
@@ -79,19 +91,78 @@ class CandidateService {
 
   // método para atualizar um candidato, falta revisar
   async update(data: TCandidate) {
+
+    const candidateExistByEmail = await this.prisma.candidate.findUnique({
+      where: {
+        email: data.email,
+      },
+    }); 
+
+    const candidateExistById= await this.prisma.candidate.findUnique({
+      where: {
+        id: data.id,
+      },
+    }); 
+
+    if(candidateExistById?.isDeleted){
+      return{
+        error: 'Usuário deletado, consulte a equipe ou restaure sua conta!',
+      };
+    }
+    
+    if (
+      candidateExistByEmail && 
+      candidateExistById &&
+      candidateExistByEmail.id !== candidateExistById.id
+    ) {
+      return {
+        error: 'Email já cadastrado!',
+      };
+    }
     const result = await this.model.update(data);
 
     return result;
   }
 
+
   // método para deletar(soft delete) um candidato, falta revisar
-  async delete(id: number) {
+  async delete(id: number): Promise<TResponseError | any> {
+  
+    // Verifica se o candidato existe
+    const candidateExistById = await this.prisma.candidate.findUnique({
+      where: { id: +id },
+    });
+  
+    if (!candidateExistById) {
+      return { error: 'Candidato não encontrado!' };
+    }
+  
+    // Verifica se o candidato já foi deletado
+    if (candidateExistById.isDeleted) {
+      return {
+        error: 'Usuário deletado, consulte a equipe ou restaure sua conta!',
+      };
+    }
+  
+    // Exclui o candidato
     const result = await this.model.delete(id);
     return result;
   }
 
   // restaurar um candidato, falta revisar
-  async restore(id: number) {
+  async restore(id: number): Promise<TResponseError | any> {
+
+    const candidateExistById= await this.prisma.candidate.findUnique({
+      where: {
+        id: +id,
+      },
+    }); 
+
+    if(!candidateExistById?.isDeleted){
+      return {
+        error: 'Usuário ativo.',
+      };
+    }
     const result = await this.model.restore(id);
     return result;
   }

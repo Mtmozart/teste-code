@@ -1,5 +1,6 @@
 import { App } from './app';
+import { EnvConfig } from './config/variables';
 
-const PORT = process.env.PORT || 3030;
+const PORT = EnvConfig.PORT || 3030;
 
 new App().start(PORT);
