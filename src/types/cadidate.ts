@@ -43,7 +43,43 @@ export type TAllDataCandidate = {
   isDeleted?: boolean;
   contactInfo: TCandidateContactInfo;
   educations: TCandidateEducation;
-
   created_at?: Date;
   updated_at?: Date;
+}
+
+export type TCandidateCreate = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  password: string;
+  age: number;
+  about: string;
+  experience: string;
+  curriculum?: string;
+  formation: string;
+  created_at?: Date;
+  updated_at?: Date;
+  isDeleted?: boolean;
+
+};
+
+export type TCandidateDefaultData = {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+  about: string;
+  experience: string;
+  contactInfo: TCandidateContactInfo;
+  educations: TCandidateEducation;
+  created_at?: Date;
+  updated_at?: Date;
+  isDeleted?: boolean;
+
+};
+
+export type TResponseError = {
+  error?: string;
 }

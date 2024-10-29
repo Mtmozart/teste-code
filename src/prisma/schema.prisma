@@ -9,37 +9,36 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 // Tabela de candidatos
 model candidate {
-  id          Int          @id @default(autoincrement())
-  name        String
-  email       String       @unique
-  age         Int
-  about       String
-  password    String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  contactInfo contactInfo   @relation(fields: [contactInfoId], references: [id], onDelete: Cascade)
-  contactInfoId Int         @unique 
-  educations  education[]  
-  isDeleted   Boolean      @default(false)
+  id            Int         @id @default(autoincrement())
+  name          String
+  email         String      @unique
+  age           Int
+  about         String
+  password      String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  contactInfo   contactInfo @relation(fields: [contactInfoId], references: [id], onDelete: Cascade)
+  contactInfoId Int         @unique
+  educations    education[]
+  isDeleted     Boolean     @default(false)
 }
 
 // Tabela de informações de contato
 model contactInfo {
-  id          Int      @id @default(autoincrement())
-  phone       String
-  address     String
-  candidate   candidate? @relation
+  id        Int        @id @default(autoincrement())
+  phone     String
+  address   String
+  candidate candidate? @relation
 }
 
 // Tabela de educação
 model education {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   formation   String
   experience  String
-  curriculum  String   @default("")
+  curriculum  String    @default("")
   candidate   candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   candidateId Int
 }

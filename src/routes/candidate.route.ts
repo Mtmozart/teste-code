@@ -22,7 +22,7 @@ router.get('/candidate/:id', authMiddleware.tokenVerify, async (req: Request, re
   await controller.show(req, res);
 });
 
-router.get('/candidate', authMiddleware.tokenVerify, async (req: Request, res: Response) => {
+router.get('/candidates', authMiddleware.tokenVerify, async (req: Request, res: Response) => {
   await controller.index(req, res);
 });
 
