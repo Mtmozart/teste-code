@@ -26,7 +26,7 @@ class CandidateService {
 
     if (candidateExist) {
       return {
-        error: 'Email já cadastrado!',
+        error: 'E-mail já cadastrado!',
       };
     }
 

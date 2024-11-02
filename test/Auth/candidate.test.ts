@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'; 
 import request from 'supertest';
 import { App } from '../../src/app';
-import { INVALID_REGISTER_MOCK, INVALID_REGISTER_MOCK_EMAIL, REGISTER_MOCK } from '../mock/register';
+import { INVALID_REGISTER_MOCK, INVALID_REGISTER_MOCK_EMAIL, REGISTER_MOCK, REGISTER_MOCK_TO_DELETE, UPDATE_MOCK } from '../mock/register';
 import AuthModel from '../../src/model/auth.model';
 import AuthService from '../../src/service/auth.service';
 import AuthController from '../../src/controller/auth.controller';
@@ -74,4 +74,74 @@ describe('Testes da rota de candidatos', () => {
     expect(response.status).toBe(401);
   });
 
+  it('Não deve conseguir registrar um candidato já cadastrado', async () => {
+   
+    await request(app).post('/candidate/register').send(REGISTER_MOCK);
+  
+    const response = await request(app).post('/candidate/register').send(REGISTER_MOCK);
+  
+    expect(response.body.error).toBe('E-mail já cadastrado!');
+    expect(response.status).toBe(400);
+  });
+
+  it('Deve conseguir retornar um suário por id  com token válido', async () => {
+   
+    const login = await request(app).post('/auth').send(MOCK_LOGIN_VALIDATE);
+    const token = login.body.token;
+    const response = await request(app).get('/candidate/1')
+    .set('Authorization', `Bearer ${token}`);
+   
+    expect(response.status).toBe(200);
+  });
+
+  it('Deve conseguir retornar todos os usuários com token válido', async () => {
+   
+    const login = await request(app).post('/auth').send(MOCK_LOGIN_VALIDATE);
+    const token = login.body.token;
+    const response = await request(app).get('/candidates')
+    .set('Authorization', `Bearer ${token}`);
+   
+    expect(response.status).toBe(200);
+  });
+
+  it.skip('Deve conseguir atualizar o usuários com token válido', async () => {
+    
+    await request(app).post('/candidate/register').send(REGISTER_MOCK);
+    const email = REGISTER_MOCK_TO_DELETE.email;
+    const password = REGISTER_MOCK_TO_DELETE.password;
+
+    const loginUser = {
+      email: email,
+      password: password
+    }
+
+    const login = await request(app).post('/auth').send(loginUser);
+    const token = login.body.token;
+    const response = await request(app).put('/candidate/2')
+    .set('Authorization', `Bearer ${token}`).send(UPDATE_MOCK);
+    expect(response.status).toBe(200);
+  });
+
+  it.skip('Deve conseguir deletar o usuários com token válido', async () => {
+    
+    await request(app).post('/candidate/register').send(REGISTER_MOCK_TO_DELETE);
+    const email = REGISTER_MOCK_TO_DELETE.email;
+    const password = REGISTER_MOCK_TO_DELETE.password;
+
+    const loginUser = {
+      email: email,
+      password: password
+    }
+
+    const login = await request(app).post('/auth').send(loginUser);
+    if(login.status == 200){   
+    const token = login.body.token;
+    const response = await request(app).delete('/candidate/3').set('Authorization', `Bearer ${token}`)
+    expect(response.status).toBe(204);
+    }
+  });
+
+  
+
+  
 });

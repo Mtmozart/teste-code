@@ -12,7 +12,7 @@ describe('Teste de exemplo', () => {
   it('deve pegar o body da req com a mensagem de boas vindas', async () => {
     const response = await request(app).get('/');
 
-    expect(response.body.message).toBe('Seja bem-vindo á API da Opus! Fique a vontade para sugerir mlhorias. (^_^)');
+    expect(response.body.message).toBe('Seja bem-vindo á API da Opus! Fique a vontade para sugerir melhorias. (^_^)');
     expect(response.status).toBe(200);
   });
 

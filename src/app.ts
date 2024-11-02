@@ -30,7 +30,7 @@ class App {
 
     private routes(): void {
         this.app.get('/', (req, res) => {
-            res.status(200).json({ message: 'Seja bem-vindo á API da Opus! Fique a vontade para sugerir mlhorias. (^_^)' });
+            res.status(200).json({ message: 'Seja bem-vindo á API da Opus! Fique a vontade para sugerir melhorias. (^_^)' });
         });
 
         this.app.use(router);
