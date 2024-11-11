@@ -1,10 +1,8 @@
-import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'; 
+import { describe, it, expect } from 'vitest'; 
 import request from 'supertest';
 import { App } from '../../src/app';
-import { INVALID_REGISTER_MOCK, INVALID_REGISTER_MOCK_EMAIL, REGISTER_MOCK, REGISTER_MOCK_TO_DELETE, UPDATE_MOCK } from '../mock/register';
-import AuthModel from '../../src/model/auth.model';
-import AuthService from '../../src/service/auth.service';
-import AuthController from '../../src/controller/auth.controller';
+import { INVALID_REGISTER_MOCK, REGISTER_MOCK, REGISTER_MOCK_TO_DELETE, UPDATE_MOCK } from '../mock/register';
+
 import { MOCK_LOGIN_VALIDATE } from '../mock/login';
 
 /* vi.mock('../../src/model/auth.model', () => {
@@ -104,9 +102,9 @@ describe('Testes da rota de candidatos', () => {
     expect(response.status).toBe(200);
   });
 
-  it.skip('Deve conseguir atualizar o usuários com token válido', async () => {
+  it('Deve conseguir atualizar o usuários com token válido', async () => {
     
-    await request(app).post('/candidate/register').send(REGISTER_MOCK);
+    await request(app).post('/candidate/register').send(REGISTER_MOCK_TO_DELETE);
     const email = REGISTER_MOCK_TO_DELETE.email;
     const password = REGISTER_MOCK_TO_DELETE.password;
 
@@ -117,11 +115,11 @@ describe('Testes da rota de candidatos', () => {
 
     const login = await request(app).post('/auth').send(loginUser);
     const token = login.body.token;
-    const response = await request(app).put('/candidate/2')
+    const response = await request(app).put('/candidate/3')
     .set('Authorization', `Bearer ${token}`).send(UPDATE_MOCK);
     expect(response.status).toBe(200);
   });
-
+  /* Depois de deletado, deve-se cancelar os testes */
   it.skip('Deve conseguir deletar o usuários com token válido', async () => {
     
     await request(app).post('/candidate/register').send(REGISTER_MOCK_TO_DELETE);
@@ -143,5 +141,4 @@ describe('Testes da rota de candidatos', () => {
 
   
 
-  
 });

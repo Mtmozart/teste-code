@@ -346,7 +346,7 @@ O arquivo do currículo é salvo no diretório `uploads/curriculum` e o nomw do 
 **DESCRIPTION:**
 
 Essa rota é responsável por buscar um candidato pelo seu id.
-Ela trás todas as informações do candidato incluido a `URL` do currículo.
+Ela trás todas as informações do candidato incluindo a `URL` do currículo.
 
 ### Buscar todos os candidatos
 
@@ -483,7 +483,7 @@ A restauração é feita alterando o campo `isDeleted` para `false` no banco de 
 > **_Rota protegida por autenticação._**
 
 - **METHOD:** _POST_.
-- **PATH:** `/uploads/curriculum`.
+- **PATH:** `/uploads/curriculum/:id`.
 - **BODY:** _Multipart Form Data_.
 
 - **RESPONSE:**
@@ -507,7 +507,7 @@ A restauração é feita alterando o campo `isDeleted` para `false` no banco de 
 
 O upload de arquivos é feito através de um formulário do tipo `multipart/form-data`.
 
-Um middleware é utilizado para fazer o upload do arquivo e salvar no diretório `uploads/curriculum`. Uma `string` com o nome do arquivo é salva no banco de dados e o arquivo pode ser acessado através do caminho estático `/view/curriculum/<nome-do-arquivo>`.
+Um middleware é utilizado para fazer o upload do arquivo e salvar no diretório `uploads/curriculum/:id`. Uma `string` com o nome do arquivo é salva no banco de dados e o arquivo pode ser acessado através do caminho estático `/view/curriculum/<nome-do-arquivo>`.
 
 ## Rotas estáticas
 

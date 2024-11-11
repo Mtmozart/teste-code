@@ -66,8 +66,4 @@ class CandidateController {
   }
 }
 
-
-
-
-
 export default CandidateController;
